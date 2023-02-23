@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users and posts</title>
+    <style>
+      #container {
+        display: flex;
+        justify-content: space-between;
+        padding: 30px;
+        background-color: rgb(56, 142, 218);
+      }
+      h1 {
+        margin: 0;
+      }
+      #user {
+        background-color: white;
+        cursor: pointer;
+      }
+      #post {
+        background-color: white;
+      }
+    </style>
+  </head>
+
+  <body style="margin: 0; padding: 0">
+
+    <div id="container">
+      <div style="width: 30%">
+        <div id="users">
+
+        </div>
+      </div>
+      <div style="width: 60%">
+        <div id="posts">
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+     let usersOf = document.getElementById("users");
+     let postsOf = document.getElementById("posts");
+
+     function getPosts(userId) {
+        let request = new XMLHttpRequest();
+        request.open(
+          "GET",
+          "https://jsonplaceholder.typicode.com/posts?userId="+userId
+        );
+        request.responseType = "json";
+        request.send();
+        postsOf.innerHTML = ""
+        request.onload = function () {
+          if (request.status >= 200 && request.status < 300) {
+            let posts = request.response;
+            for (post of posts) {
+              let content = `
+                <div id="post">
+                    <h3> ${post.title} </h3>
+                    <p> ${post.body} </p>
+                </div>`;
+                // document.getElementById("posts").innerHTML += content;
+                postsOf.innerHTML += content;
+            }
+          } else {
+            alert("error");
+          }
+        };
+      }
+
+      function getUsers() {
+        let request = new XMLHttpRequest();
+        request.open(
+          "GET",
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        request.responseType = "json";
+        request.send();
+        request.onload = function () {
+          if (request.status >= 200 && request.status < 300) {
+            let users = request.response;
+            for (user of users) {
+              let content = `
+                <div id="user" onclick="userClicked(${user.id})">
+                    <h3> ${user.name} </h3>
+                    <p> ${user.email} </p>
+                </div>`;
+                usersOf.innerHTML += content;
+            }
+          } else {
+            alert("error");
+          }
+        };
+      }
+   
+      function userClicked(id){
+        // console.log(id);
+        getPosts(id);
+      }
+      
+
+      getUsers();
+      getPosts(1);
+
+    </script>
+  </body>
+</html>

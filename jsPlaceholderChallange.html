@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>9.1 challange</title>
+    <style></style>
+  </head>
+  <body>
+    <div id="main-div" style="display: flex">
+      <div id="users-list" style="background-color: gray"></div>
+      <div id="posts">
+        <!-- <div id="nested"></div> -->
+        <!-- <div id="cont">
+          <div id="tit"></div>
+          <p id="par"></p>
+        </div> -->
+      </div>
+    </div>
+
+    <script>
+      let posts = document.getElementById("posts");
+  
+      ///////////////////// get users 
+
+function getUsers(){
+      let request = new XMLHttpRequest();
+      request.open("GET", "https://jsonplaceholder.typicode.com/users");
+      request.responseType = "json";
+      request.send();
+      request.onload = function () {
+        let users = request.response;
+        for (user of users) {
+          let container = document.createElement("div");
+          container.className = "container";
+
+          let userName = document.createElement("h1");
+          userName.innerHTML = user.name;
+          let userEmail = document.createElement("p");
+          userEmail.innerHTML = user.email;
+          let btn = document.createElement("button");
+          btn.innerHTML = "click";
+          btn.style.color = "red";
+          btn.style.padding = "30px";
+
+          container.appendChild(userName);
+          container.appendChild(userEmail);
+          container.appendChild(btn);
+
+          container.style.border = "5px red solid";
+          container.style.color = "red";
+          container.style.cssText = "margin: 50px;";
+
+          let userList = document.getElementById("users-list");
+          userList.appendChild(container);
+          let horz = document.createElement("hr");
+          userList.appendChild(horz);
+          console.log("object");
+        }
+      }
+
+       ////////////////////  get posts
+       
+       function getPosts(){
+        document.addEventListener("click", function (e) {
+          // let test = document.getElementById("nested");
+          // posts.removeChild(posts.firstElementChild);
+
+          let userN = 0;
+          if (e.target.className == "container") {
+            userN = e.target.firstChild.innerHTML;
+          } else if (e.target.parentNode.className == "container") {
+            userN = e.target.parentNode.firstChild.innerHTML;
+          }
+          let identification;
+          if (userN){
+            if(posts.firstElementChild){
+          posts.removeChild(posts.firstElementChild)
+               console.log(posts.firstElementChild);
+               console.log("removed");
+            }
+            for (user of users) {
+              if (user.name == userN) {
+                identification = user.id;
+
+                ///////////////////////////////////////////
+
+                let req = new XMLHttpRequest();
+                req.open("GET", "https://jsonplaceholder.typicode.com/posts");
+                req.responseType = "json";
+                req.send();
+
+                req.onload = function () {
+                  let pos = req.response;
+
+                  let test = document.createElement("div");
+                  for (user of pos) {
+  
+                    if (user.userId == identification) {
+                      let cont = document.createElement("div");
+                      cont.style.padding = "30px";
+                      // cont.style.display = "flex"
+                      let tit = document.createElement("div");
+                      tit.innerHTML = `###${user.title}`;
+                      let horz = document.createElement("hr");
+                      let par = document.createElement("p");
+                      par.innerHTML = user.body;
+                      cont.appendChild(tit);
+                      cont.appendChild(horz);
+                      cont.appendChild(par);
+
+       
+                      // test.innerHTML = cont;
+                      test.appendChild(cont)
+                      // console.log(test);
+                      
+
+                      console.log("mostafa");
+                      // document.getElementById("tit").innerHTML =  `###${user.title}`;
+                      // document.getElementById("par").innerHTML =  user.body;
+                    }
+                  }
+                  posts.appendChild(test);
+                };
+
+                ///////////////////////////////////////////
+
+                break;
+              }
+            }
+          }
+        
+          // let req = new XMLHttpRequest();
+          // req.open("GET", "https://jsonplaceholder.typicode.com/posts")
+          // req.responseType = "json";
+          // req.send();
+
+          // req.onload = function(){
+
+          //   let pos = req.response;
+          //   console.log("mostafa 1");
+          //   console.log(identification);
+
+          //    for(user of pos){
+          //     if(user.userId == identification){
+          //   console.log(identification);
+
+          //       let cont = document.createElement("div");
+          //       cont.style.padding = "30px";
+          //       let tit = document.createElement("title")
+          //       let horz = document.createElement("hr");
+          //       let par = document.createElement("p");
+          //       cont.appendChild(tit);
+          //       cont.appendChild(horz);
+          //       cont.appendChild(par);
+
+          //       let posts = document.getElementById("posts");
+          //       posts.appendChild(cont);
+
+          //       console.log("mostafa");
+          //     }
+
+          //    }
+          // }
+        });
+      };
+    }
+
+      // let getPosts.onclif
+    </script>
+  </body>
+</html>
